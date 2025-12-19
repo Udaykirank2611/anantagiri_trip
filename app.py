@@ -178,7 +178,6 @@ with p1:
         <div class="pack-item">✅ Hoodie/Jacket</div>
         <div class="pack-item">✅ Comfy Shoes</div>
         <div class="pack-item">✅ Cap/Hat</div>
-        <div class="pack-item">✅ Extra Outfit</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -189,7 +188,6 @@ with p2:
         <div class="pack-item">✅ Toothbrush/Paste</div>
         <div class="pack-item">✅ Face Wash</div>
         <div class="pack-item">✅ Hand Sanitizer</div>
-        <div class="pack-item">✅ Mosquito Repellent</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -224,3 +222,4 @@ st.markdown("""
     <p style="font-size: 0.8em; opacity: 0.8;">Designed for B.Tech Batch 2022-2026</p>
 </div>
 """, unsafe_allow_html=True)
+
