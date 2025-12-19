@@ -13,81 +13,81 @@ st.markdown("""
     /* Import Google Font */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
-    /* Global Settings - Force Light Background */
+    /* 1. MAIN BACKGROUND */
     .stApp {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         font-family: 'Poppins', sans-serif;
     }
+
+    /* 2. TEXT VISIBILITY FIX (CRITICAL) */
+    /* This forces all standard text elements to be dark grey, overriding Dark Mode white text */
+    p, span, li, label, .stMarkdown {
+        color: #2c3e50 !important; 
+    }
     
-    /* Force all Headers to be Dark Blue */
+    /* Headers */
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Poppins', sans-serif;
         color: #1e3c72 !important;
+        font-family: 'Poppins', sans-serif;
     }
 
-    /* HTML CARD STYLING (For Static Content) */
+    /* 3. HTML CARD STYLING */
     .card {
         background-color: #ffffff;
         padding: 25px;
         border-radius: 20px;
         box-shadow: 0 10px 20px rgba(0,0,0,0.08);
         margin-bottom: 20px;
-        transition: transform 0.3s ease;
         border-left: 5px solid #2a5298;
-        color: #333333 !important; 
     }
     
-    .card p, .card li, .card span {
-        color: #444444 !important;
-        font-weight: 500;
+    /* Force text inside custom HTML cards to be dark */
+    .card p, .card li, .card span, .card b {
+        color: #333333 !important; 
     }
 
-    .card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+    /* 4. STREAMLIT WIDGET STYLING (The Backpack Section) */
+    
+    /* Style the st.container(border=True) to look like a card */
+    div[data-testid="stBorder"] {
+        background-color: #ffffff !important;
+        border: none !important;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        padding: 15px;
     }
 
-    /* Highlight Text */
+    /* Fix Checkbox Text Visibility */
+    /* Target the internal paragraph inside the checkbox label */
+    div[data-testid="stCheckbox"] label p {
+        color: #333333 !important;
+        font-size: 1rem;
+    }
+    
+    /* Highlight Styles */
     .highlight {
         color: #e67e22 !important;
         font-weight: 800;
     }
 
-    /* Itinerary Headers */
+    /* Itinerary Timeline Header */
     .day-header {
         background-color: #e3f2fd;
-        padding: 10px 15px;
+        padding: 10px;
         border-radius: 10px;
         color: #1565c0 !important;
         font-weight: 700;
-        margin-bottom: 15px;
         text-align: center;
+        margin-bottom: 15px;
         border: 1px solid #bbdefb;
     }
-
-    /* CUSTOM STYLE FOR STREAMLIT CONTAINERS (To make them look like cards) */
-    div[data-testid="stBorder"] {
-        background-color: white;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        border: none;
-        padding: 20px;
-    }
-
-    /* Checkbox Styling */
-    .stCheckbox label {
-        font-size: 16px;
-        color: #333 !important;
-    }
     
-    /* Footer Styling */
+    /* Footer */
     .footer {
         text-align: center;
-        font-size: 1.2em;
-        color: #555555 !important;
+        color: #666666 !important;
         margin-top: 50px;
         font-style: italic;
-        font-weight: 600;
     }
 
 </style>
@@ -99,7 +99,7 @@ with col_head1:
     st.image("https://cdn-icons-png.flaticon.com/512/3194/3194766.png", width=120) 
 with col_head2:
     st.markdown("<h1 style='padding-top: 20px;'>ANANTHAGIRI HILLS</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='color: #555555;'>🎓 The Final Chapter: B.Tech Class of 2026</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='color: #555555 !important;'>🎓 The Final Chapter: B.Tech Class of 2026</h3>", unsafe_allow_html=True)
 
 st.write("") 
 
@@ -155,8 +155,8 @@ with it_col2:
         <div class="day-header">SUNDAY (DEC 21)</div>
         <ul style="list-style-type: none; padding-left: 0; line-height: 2;">
             <li>🌅 <b>06:00 AM:</b> Sunrise View (Wake up!)</li>
-            <li>☕ <b>07:30 AM:</b> Forest Trek to Viewpoint</li>
-            <li>⛰️ <b>08:30 AM:</b> Breakfast</li>
+            <li>☕ <b>07:30 AM:</b> Breakfast</li>
+            <li>⛰️ <b>08:30 AM:</b> Forest Trek to Viewpoint</li>
             <li>📸 <b>10:00 AM:</b> The Final Group Photo</li>
             <li>🚌 <b>12:00 AM:</b> Return Journey Starts (Approx)</li>
             <li>🏠 <b>03:00 PM:</b> Reach Home (Approx)</li>
@@ -172,22 +172,28 @@ st.caption("Tick the box when you pack the item! It will strike through when don
 
 # Helper function for strikethrough logic
 def smart_checkbox(item_name, key_group):
-    # Unique key for every item
     key = f"{key_group}_{item_name}"
-    # Check current state
     checked = st.session_state.get(key, False)
     
-    # Logic: If checked, add strikethrough formatting (~~text~~)
-    label = f"~~{item_name}~~" if checked else item_name
+    # Logic: If checked, add strikethrough formatting
+    # Using HTML span with style inside the label to ensure color works
+    if checked:
+        label = f"<span style='text-decoration: line-through; color: #999 !important;'>{item_name}</span>"
+    else:
+        label = f"<span style='color: #333 !important;'>{item_name}</span>"
+        
+    # We use unsafe_allow_html inside the checkbox label via markdown if supported, 
+    # but standard text works best. Simple strike through unicode is safer for pure python:
+    display_label = f"~~{item_name}~~" if checked else item_name
     
-    st.checkbox(label, key=key)
+    st.checkbox(display_label, key=key)
 
-# Columns for the list
 p1, p2, p3, p4 = st.columns(4)
 
 with p1:
     with st.container(border=True):
-        st.markdown("<h4 style='color:#27ae60 !important;'>👕 Wearables</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color:#27ae60 !important; margin:0;'>👕 Wearables</h4>", unsafe_allow_html=True)
+        st.write("") # small gap
         smart_checkbox("Hoodie/Jacket", "wear")
         smart_checkbox("Comfy Shoes", "wear")
         smart_checkbox("Cap/Hat", "wear")
@@ -196,7 +202,8 @@ with p1:
 
 with p2:
     with st.container(border=True):
-        st.markdown("<h4 style='color:#2980b9 !important;'>🪥 Hygiene</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color:#2980b9 !important; margin:0;'>🪥 Hygiene</h4>", unsafe_allow_html=True)
+        st.write("")
         smart_checkbox("Toothbrush/Paste", "hyg")
         smart_checkbox("Face Wash", "hyg")
         smart_checkbox("Hand Sanitizer", "hyg")
@@ -205,7 +212,8 @@ with p2:
 
 with p3:
     with st.container(border=True):
-        st.markdown("<h4 style='color:#8e44ad !important;'>📱 Tech & ID</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color:#8e44ad !important; margin:0;'>📱 Tech & ID</h4>", unsafe_allow_html=True)
+        st.write("")
         smart_checkbox("Power Bank", "tech")
         smart_checkbox("Earphones", "tech")
         smart_checkbox("Charging Cable", "tech")
@@ -213,7 +221,8 @@ with p3:
 
 with p4:
     with st.container(border=True):
-        st.markdown("<h4 style='color:#d35400 !important;'>🍫 Survival</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='color:#d35400 !important; margin:0;'>🍫 Survival</h4>", unsafe_allow_html=True)
+        st.write("")
         smart_checkbox("Water Bottle", "surv")
         smart_checkbox("Chocolates/Bars", "surv")
         smart_checkbox("Personal Meds", "surv")
