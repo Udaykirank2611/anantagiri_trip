@@ -7,31 +7,25 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# --- CUSTOM CSS FOR LIGHT THEME & STYLING ---
+# --- CUSTOM CSS FOR VISIBILITY AND STYLE ---
 st.markdown("""
 <style>
     /* Import Google Font */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
 
-    /* Global Settings */
+    /* Global Settings - Force Light Background */
     .stApp {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         font-family: 'Poppins', sans-serif;
     }
     
+    /* Force all Headers to be Dark Blue */
     h1, h2, h3, h4, h5, h6 {
         font-family: 'Poppins', sans-serif;
-        color: #2c3e50;
+        color: #1e3c72 !important;
     }
 
-    h1 {
-        font-weight: 800;
-        background: -webkit-linear-gradient(#1e3c72, #2a5298);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    /* Custom Cards */
+    /* CARD STYLING - FIXED TEXT VISIBILITY */
     .card {
         background-color: #ffffff;
         padding: 25px;
@@ -40,52 +34,58 @@ st.markdown("""
         margin-bottom: 20px;
         transition: transform 0.3s ease;
         border-left: 5px solid #2a5298;
+        
+        /* CRITICAL FIX: Force text inside cards to be dark grey */
+        color: #333333 !important; 
     }
     
+    /* Specific overrides for text elements inside cards */
+    .card p, .card li, .card span {
+        color: #444444 !important;
+        font-weight: 500;
+    }
+
     .card:hover {
         transform: translateY(-5px);
         box-shadow: 0 15px 30px rgba(0,0,0,0.12);
     }
 
-    /* Highlights */
+    /* Orange Highlight Text */
     .highlight {
-        color: #e67e22; /* Orange accent */
-        font-weight: bold;
+        color: #e67e22 !important;
+        font-weight: 800;
     }
 
-    /* Itinerary Timeline Style */
+    /* Itinerary Headers */
     .day-header {
         background-color: #e3f2fd;
         padding: 10px 15px;
         border-radius: 10px;
-        color: #1565c0;
-        font-weight: 600;
-        margin-bottom: 10px;
+        color: #1565c0 !important;
+        font-weight: 700;
+        margin-bottom: 15px;
         text-align: center;
+        border: 1px solid #bbdefb;
     }
 
-    /* Packing List Items */
+    /* Packing List Categories */
     .pack-category {
         font-size: 1.1em;
-        font-weight: 600;
-        color: #2c3e50;
+        font-weight: 700;
+        color: #2c3e50 !important;
         border-bottom: 2px solid #ecf0f1;
         margin-bottom: 10px;
         padding-bottom: 5px;
     }
-    .pack-item {
-        font-size: 0.95em;
-        color: #555;
-        margin-bottom: 5px;
-    }
     
-    /* Footer */
+    /* Footer Styling */
     .footer {
         text-align: center;
         font-size: 1.2em;
-        color: #555;
+        color: #555555 !important;
         margin-top: 50px;
         font-style: italic;
+        font-weight: 600;
     }
 
 </style>
@@ -94,10 +94,12 @@ st.markdown("""
 # --- HEADER SECTION ---
 col_head1, col_head2 = st.columns([1, 4])
 with col_head1:
-    st.image("https://cdn-icons-png.flaticon.com/512/3194/3194766.png", width=120) # Bus Icon
+    # Changed to a simpler URL or local usage if needed
+    st.image("https://cdn-icons-png.flaticon.com/512/3194/3194766.png", width=120) 
 with col_head2:
     st.markdown("<h1 style='padding-top: 20px;'>ANANTHAGIRI HILLS</h1>", unsafe_allow_html=True)
-    st.markdown("### 🎓 The Final Chapter: B.Tech Class of 2026", unsafe_allow_html=True)
+    # Added explicit color styling to the subtitle
+    st.markdown("<h3 style='color: #555555;'>🎓 The Final Chapter: B.Tech Class of 2026</h3>", unsafe_allow_html=True)
 
 st.write("") # Spacer
 
@@ -164,10 +166,9 @@ with it_col2:
 
 st.markdown("---")
 
-# --- PACKING LIST (IMPROVED GRID FORMAT) ---
+# --- PACKING LIST (GRID FORMAT) ---
 st.markdown("<h2 style='text-align:center;'>🎒 Backpack Check</h2>", unsafe_allow_html=True)
 
-# Using 4 columns for a clean categorized look
 p1, p2, p3, p4 = st.columns(4)
 
 with p1:
@@ -216,10 +217,10 @@ with p4:
 
 st.markdown("---")
 
-# --- FINAL EMOTIONAL FOOTER ---
+# --- FINAL FOOTER ---
 st.markdown("""
 <div class="footer">
     <p>One last roll call. One last ride. Let's make it legendary. 🚀</p>
-    <p style="font-size: 0.8em; color: #999;">Designed for B.Tech Batch 2022-2026</p>
+    <p style="font-size: 0.8em; opacity: 0.8;">Designed for B.Tech Batch 2022-2026</p>
 </div>
 """, unsafe_allow_html=True)
