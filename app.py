@@ -155,8 +155,8 @@ with it_col2:
         <div class="day-header">SUNDAY (DEC 21)</div>
         <ul style="list-style-type: none; padding-left: 0; line-height: 2;">
             <li>🌅 <b>06:00 AM:</b> Sunrise View (Wake up!)</li>
-            <li>☕ <b>07:30 AM:</b> Breakfast</li>
-            <li>⛰️ <b>08:30 AM:</b> Forest Trek to Viewpoint</li>
+            <li>⛰️ <b>07:30 AM:</b> Forest Trek to Viewpoint</li>
+            <li>☕ <b>09:00 AM:</b> Breakfast</li>
             <li>📸 <b>10:00 AM:</b> The Final Group Photo</li>
             <li>🚌 <b>12:00 AM:</b> Return Journey Starts (Approx)</li>
             <li>🏠 <b>03:00 PM:</b> Reach Home (Approx)</li>
@@ -198,7 +198,6 @@ with p1:
         smart_checkbox("Comfy Shoes", "wear")
         smart_checkbox("Cap/Hat", "wear")
         smart_checkbox("Small Towel", "wear")
-        smart_checkbox("Extra Outfit", "wear")
 
 with p2:
     with st.container(border=True):
@@ -208,7 +207,6 @@ with p2:
         smart_checkbox("Face Wash", "hyg")
         smart_checkbox("Hand Sanitizer", "hyg")
         smart_checkbox("Tissues/Wipes", "hyg")
-        smart_checkbox("Deodorant", "hyg")
 
 with p3:
     with st.container(border=True):
@@ -238,3 +236,4 @@ st.markdown("""
     <p style="font-size: 0.8em; opacity: 0.8;">Designed for B.Tech Batch 2022-2026</p>
 </div>
 """, unsafe_allow_html=True)
+
