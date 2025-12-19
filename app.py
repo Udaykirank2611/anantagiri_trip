@@ -25,7 +25,7 @@ st.markdown("""
         color: #1e3c72 !important;
     }
 
-    /* CARD STYLING - FIXED TEXT VISIBILITY */
+    /* HTML CARD STYLING (For Static Content) */
     .card {
         background-color: #ffffff;
         padding: 25px;
@@ -34,12 +34,9 @@ st.markdown("""
         margin-bottom: 20px;
         transition: transform 0.3s ease;
         border-left: 5px solid #2a5298;
-        
-        /* CRITICAL FIX: Force text inside cards to be dark grey */
         color: #333333 !important; 
     }
     
-    /* Specific overrides for text elements inside cards */
     .card p, .card li, .card span {
         color: #444444 !important;
         font-weight: 500;
@@ -50,7 +47,7 @@ st.markdown("""
         box-shadow: 0 15px 30px rgba(0,0,0,0.12);
     }
 
-    /* Orange Highlight Text */
+    /* Highlight Text */
     .highlight {
         color: #e67e22 !important;
         font-weight: 800;
@@ -68,14 +65,19 @@ st.markdown("""
         border: 1px solid #bbdefb;
     }
 
-    /* Packing List Categories */
-    .pack-category {
-        font-size: 1.1em;
-        font-weight: 700;
-        color: #2c3e50 !important;
-        border-bottom: 2px solid #ecf0f1;
-        margin-bottom: 10px;
-        padding-bottom: 5px;
+    /* CUSTOM STYLE FOR STREAMLIT CONTAINERS (To make them look like cards) */
+    div[data-testid="stBorder"] {
+        background-color: white;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        border: none;
+        padding: 20px;
+    }
+
+    /* Checkbox Styling */
+    .stCheckbox label {
+        font-size: 16px;
+        color: #333 !important;
     }
     
     /* Footer Styling */
@@ -94,14 +96,12 @@ st.markdown("""
 # --- HEADER SECTION ---
 col_head1, col_head2 = st.columns([1, 4])
 with col_head1:
-    # Changed to a simpler URL or local usage if needed
     st.image("https://cdn-icons-png.flaticon.com/512/3194/3194766.png", width=120) 
 with col_head2:
     st.markdown("<h1 style='padding-top: 20px;'>ANANTHAGIRI HILLS</h1>", unsafe_allow_html=True)
-    # Added explicit color styling to the subtitle
     st.markdown("<h3 style='color: #555555;'>🎓 The Final Chapter: B.Tech Class of 2026</h3>", unsafe_allow_html=True)
 
-st.write("") # Spacer
+st.write("") 
 
 # --- TRIP SUMMARY & EMOTION ---
 col1, col2 = st.columns(2)
@@ -155,65 +155,70 @@ with it_col2:
         <div class="day-header">SUNDAY (DEC 21)</div>
         <ul style="list-style-type: none; padding-left: 0; line-height: 2;">
             <li>🌅 <b>06:00 AM:</b> Sunrise View (Wake up!)</li>
-            <li>☕ <b>07:30 AM:</b> Breakfast</li>
-            <li>⛰️ <b>08:30 AM:</b> Forest Trek to Viewpoint</li>
+            <li>☕ <b>07:30 AM:</b> Forest Trek to Viewpoint</li>
+            <li>⛰️ <b>08:30 AM:</b> Breakfast</li>
             <li>📸 <b>10:00 AM:</b> The Final Group Photo</li>
-            <li>🚌 <b>11:00 AM:</b> Return Journey Starts</li>
-            <li>🏠 <b>02:00 PM:</b> Reach Home (Approx)</li>
+            <li>🚌 <b>12:00 AM:</b> Return Journey Starts (Approx)</li>
+            <li>🏠 <b>03:00 PM:</b> Reach Home (Approx)</li>
         </ul>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("---")
 
-# --- PACKING LIST (GRID FORMAT) ---
-st.markdown("<h2 style='text-align:center;'>🎒 Backpack Check</h2>", unsafe_allow_html=True)
+# --- INTERACTIVE PACKING LIST ---
+st.markdown("<h2 style='text-align:center; margin-bottom: 20px;'>🎒 Backpack Check</h2>", unsafe_allow_html=True)
+st.caption("Tick the box when you pack the item! It will strike through when done.")
 
+# Helper function for strikethrough logic
+def smart_checkbox(item_name, key_group):
+    # Unique key for every item
+    key = f"{key_group}_{item_name}"
+    # Check current state
+    checked = st.session_state.get(key, False)
+    
+    # Logic: If checked, add strikethrough formatting (~~text~~)
+    label = f"~~{item_name}~~" if checked else item_name
+    
+    st.checkbox(label, key=key)
+
+# Columns for the list
 p1, p2, p3, p4 = st.columns(4)
 
 with p1:
-    st.markdown("""
-    <div class="card" style="padding: 15px; border-left: 3px solid #27ae60;">
-        <div class="pack-category">👕 Wearables</div>
-        <div class="pack-item">✅ Hoodie/Jacket</div>
-        <div class="pack-item">✅ Comfy Shoes</div>
-        <div class="pack-item">✅ Cap/Hat</div>
-        <div class="pack-item">✅ Small Towel</div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown("<h4 style='color:#27ae60 !important;'>👕 Wearables</h4>", unsafe_allow_html=True)
+        smart_checkbox("Hoodie/Jacket", "wear")
+        smart_checkbox("Comfy Shoes", "wear")
+        smart_checkbox("Cap/Hat", "wear")
+        smart_checkbox("Small Towel", "wear")
+        smart_checkbox("Extra Outfit", "wear")
 
 with p2:
-    st.markdown("""
-    <div class="card" style="padding: 15px; border-left: 3px solid #2980b9;">
-        <div class="pack-category">🪥 Hygiene</div>
-        <div class="pack-item">✅ Toothbrush/Paste</div>
-        <div class="pack-item">✅ Face Wash</div>
-        <div class="pack-item">✅ Hand Sanitizer</div>
-        <div class="pack-item">✅ Tissues</div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown("<h4 style='color:#2980b9 !important;'>🪥 Hygiene</h4>", unsafe_allow_html=True)
+        smart_checkbox("Toothbrush/Paste", "hyg")
+        smart_checkbox("Face Wash", "hyg")
+        smart_checkbox("Hand Sanitizer", "hyg")
+        smart_checkbox("Tissues/Wipes", "hyg")
+        smart_checkbox("Deodorant", "hyg")
 
 with p3:
-    st.markdown("""
-    <div class="card" style="padding: 15px; border-left: 3px solid #8e44ad;">
-        <div class="pack-category">📱 Tech & ID</div>
-        <div class="pack-item">✅ Power Bank</div>
-        <div class="pack-item">✅ Earphones</div>
-        <div class="pack-item">✅ Charging Cable</div>
-        <div class="pack-item">✅ <b>Original ID Proof</b></div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown("<h4 style='color:#8e44ad !important;'>📱 Tech & ID</h4>", unsafe_allow_html=True)
+        smart_checkbox("Power Bank", "tech")
+        smart_checkbox("Earphones", "tech")
+        smart_checkbox("Charging Cable", "tech")
+        smart_checkbox("Original ID Proof", "tech")
 
 with p4:
-    st.markdown("""
-    <div class="card" style="padding: 15px; border-left: 3px solid #d35400;">
-        <div class="pack-category">🍫 Survival</div>
-        <div class="pack-item">✅ Water Bottle</div>
-        <div class="pack-item">✅ Chocolates/Bars</div>
-        <div class="pack-item">✅ Personal Meds</div>
-        <div class="pack-item">✅ Cash (Small notes)</div>
-    </div>
-    """, unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown("<h4 style='color:#d35400 !important;'>🍫 Survival</h4>", unsafe_allow_html=True)
+        smart_checkbox("Water Bottle", "surv")
+        smart_checkbox("Chocolates/Bars", "surv")
+        smart_checkbox("Personal Meds", "surv")
+        smart_checkbox("Cash (Small notes)", "surv")
+        smart_checkbox("Plastic Bag (Trash)", "surv")
 
 st.markdown("---")
 
@@ -224,5 +229,3 @@ st.markdown("""
     <p style="font-size: 0.8em; opacity: 0.8;">Designed for B.Tech Batch 2022-2026</p>
 </div>
 """, unsafe_allow_html=True)
-
-
